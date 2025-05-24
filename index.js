@@ -216,16 +216,4 @@ app.listen(port, () => {
   console.log(`plant-tracker server is running on port ${port}`);
 });
 
-// app.get("/plants", async (req, res) => {
-//   const result = await plantsCollection
-//     .find()
-//     .sort({ _id: -1 }) // latest first
-//     .limit(6)
-//     .toArray();
-//   res.send(result);
-// });
 
-// app.get('/plants', async(req,res) =>{
-//   const result = await plantsCollection.find().toArray().limit(6);
-//   res.send(result);
-// })
