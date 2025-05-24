@@ -75,16 +75,7 @@ async function run() {
 
     
 
-    // app.get('/plants/:email', async (req,res) =>{
-    //     const email = req.params.email;
-
-    //     const query = {email: new email}
-
-    //     const result = await plantsCollection.find(query);
-
-    //     res.send(result);
-    // } )
-
+    
     // new-plant section last 6ta data
 
     app.get("/new_plants", async (req, res) => {
