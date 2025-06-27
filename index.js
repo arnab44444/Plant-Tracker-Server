@@ -33,6 +33,9 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
+
+    // eta comment korte hbe joma dewar age
+
     //await client.connect();
 
     const plantsCollection = client.db("plantDB").collection("plants");
@@ -46,20 +49,21 @@ async function run() {
       res.send(result);
     });
 
+    // app.get("/plants", async (req, res) => {
+    //   const result = await plantsCollection.find().toArray();
+    //   res.send(result);
+    // });
+
+    // ✅ CHANGED: filter by query email if provided
     app.get("/plants", async (req, res) => {
-      const result = await plantsCollection.find().toArray();
-      res.send(result);
-    });
+      const email = req.query.email;
 
-    // view detatails er get
+      let query = {};
+      if (email) {
+        query = { email: email }; // 🔁 Field name must match your database (e.g. "email" or "addedByEmail")
+      }
 
-    app.get("/plant/:id", async (req, res) => {
-      const id = req.params.id;
-
-      const query = { _id: new ObjectId(id) };
-
-      const result = await plantsCollection.findOne(query);
-
+      const result = await plantsCollection.find(query).toArray();
       res.send(result);
     });
 
@@ -73,9 +77,32 @@ async function run() {
       res.send(result);
     });
 
-    
+    // dashboarder jnno
 
-    
+    // app.get("/plants", async (req, res) => {
+    //   const email = req.query.email;
+
+    //   let query = {};
+    //   if (email) {
+    //     query = { addedByEmail: email }; // or whatever field you store user email in
+    //   }
+
+    //   const result = await plantsCollection.find(query).toArray();
+    //   res.send(result);
+    // });
+
+    // view detatails er get
+
+    app.get("/plant/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const query = { _id: new ObjectId(id) };
+
+      const result = await plantsCollection.findOne(query);
+
+      res.send(result);
+    });
+
     // new-plant section last 6ta data
 
     app.get("/new_plants", async (req, res) => {
@@ -157,55 +184,20 @@ async function run() {
         },
       };
 
-      const result = await plantsCollection.updateOne(
-        query,
-        updateData,
-        
-      );
+      const result = await plantsCollection.updateOne(query, updateData);
 
       res.send(result);
     });
-
-    // app.get("/update_plant/:id", async (req, res) => {
-    //   const id = req.params.id;
-
-    //   const query = { _id: new ObjectId(id) };
-
-    //   const result = await plantsCollection.findOne(query);
-
-    //   res.send(result);
-    // });
-
-    // app.put('/plants/:id', async(req,res) =>{
-    //       const id = req.params.id;
-
-    //       const filter = {_id : new ObjectId(id)}
-
-    //       const options  = {upsert : true};
-
-    //       const updatedPlant = req.body;
-
-    //       const updatedDoc = {
-    //         $set: updatedPlant
-    //       }
-
-    //       const result = await plantsCollection.updateOne(filter, updatedDoc, options);
-
-    //   res.send(result);
-    // })
-
-    //
-
-    // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 });
-    // console.log(
-    //   "Pinged your deployment. You successfully connected to MongoDB!"
-    // );
   } finally {
     // Ensures that the client will close when you finish/error
     //await client.close();
   }
 }
+
+
+
+
+
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
@@ -215,7 +207,6 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`plant-tracker server is running on port ${port}`);
 });
-
 
 // 7th
 // final commit
